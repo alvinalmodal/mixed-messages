@@ -3,16 +3,15 @@ import SampleQuotes from "../data/sampleQuotes";
 import QuoteService from "../services/quoteServices";
 
 function Quote(props) {
-  const [quotes, setQuotes] = useState(0);
+  let quotes = [];
   const [currentQuote, setCurrentQuote] = useState({});
 
   const getQuotes = async () => {
     try {
       const quoteService = new QuoteService();
-      let quotes = await quoteService.getRandomQuotes();
-      setQuotes(quotes);
+      quotes = await quoteService.getRandomQuotes();
     } catch (error) {
-      setQuotes(SampleQuotes.getLocalData());
+      quotes = SampleQuotes.getLocalData();
     }
   };
 
@@ -28,18 +27,19 @@ function Quote(props) {
 
   useEffect(() => {
     getQuotes();
-    setCurrentQuote(getRandomQuote);
     const quoteInterval = setInterval(() => {
-      setCurrentQuote(getRandomQuote());
+      let randomQuote = getRandomQuote();
+      setCurrentQuote((prevQuote) => (prevQuote = randomQuote));
     }, 5000);
+
     return () => clearInterval(quoteInterval);
   }, []);
 
   return (
     <React.Fragment>
       <div className="quote">
-        <h1>{currentQuote.quote}</h1>
-        <h2>{currentQuote.author}</h2>
+        <h1>{currentQuote.quote || `Random quote app.`}</h1>
+        <h2>{currentQuote.author || `Alvin B. Almodal`}</h2>
       </div>
     </React.Fragment>
   );
