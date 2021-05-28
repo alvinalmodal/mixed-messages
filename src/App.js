@@ -1,9 +1,10 @@
 import "./App.css";
+import Quote from "./components/quote";
 
 function App() {
   return (
     <div className="App">
-      <h1>Test</h1>
+      <Quote></Quote>
     </div>
   );
 }
